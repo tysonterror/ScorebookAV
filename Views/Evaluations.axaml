@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:viewmodels="using:ScorebookAV.ViewModels"
+			 xmlns:datatemplates="using:ScorebookAV.TemplateSelectors"
+			 xmlns:models="using:ScorebookAV.Models"
+			 xmlns:items="using:ScorebookAV.Models.Items"
+			 xmlns:converters="using:ScorebookAV.Converters"
+			 xmlns:enums="using:ScorebookAV.Models.Enums"
+             x:Class="ScorebookAV.Views.EvaluationsView"
+			 x:DataType="viewmodels:EvaluationsViewModel"
+			 >
+	<UserControl.Resources>
+		<converters:ScoreToCheckedConverter x:Key="ScoreToCheckedConverter"></converters:ScoreToCheckedConverter>
+		<converters:StudentEvaluationAdjustScoreConverter x:Key="StudentEvaluationAdjustScoreConverter"></converters:StudentEvaluationAdjustScoreConverter>
+	</UserControl.Resources>
+
+	<Grid RowDefinitions="*,3*">
+		<DataGrid GridLinesVisibility="All"  IsReadOnly="True" Margin="20" SelectedItem="{Binding SelectedClassEvaluation}" ItemsSource="{Binding ClassEvaluations}">
+			<DataGrid.Columns>
+				<DataGridTextColumn  Header="Id" Binding="{Binding ClassEvaluationId}"></DataGridTextColumn>
+				<DataGridTextColumn  Header="Klas" Binding="{Binding Class.Description}"></DataGridTextColumn>
+				<DataGridTextColumn  Header="EvaluatieType" Binding="{Binding EvaluationType.Description}" ></DataGridTextColumn>
+			</DataGrid.Columns>
+
+		</DataGrid>
+		<DataGrid IsReadOnly="True" Grid.Row="1" ItemsSource="{Binding SelectedClassStudentEvaluations}">
+			<DataGrid.DataTemplates>
+				<datatemplates:EvaluationTypeTemplateSelector>
+					<DataTemplate x:Key="1" DataType="models:ClassStudentEvaluation">
+						<ItemsControl ItemsSource="{Binding EvaluationType.PEvaluationTypeParams}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border>
+										<Grid Width="150" RowDefinitions="*,*">
+											<CheckBox Content="{Binding Description}" Grid.Row="1" Command="{Binding Path=((viewmodels:EvaluationsViewModel)DataContext).SetCheckmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}">
+												<CheckBox.CommandParameter>
+													<MultiBinding Converter="{StaticResource StudentEvaluationAdjustScoreConverter}">
+														<Binding Path="$parent[ItemsControl].((models:ClassStudentEvaluation)DataContext)"></Binding>
+														<Binding Path="."></Binding>
+													</MultiBinding>
+												</CheckBox.CommandParameter>
+												<CheckBox.IsChecked>
+													<MultiBinding Converter="{StaticResource ScoreToCheckedConverter}">
+														<Binding Path="$parent[ItemsControl].((models:ClassStudentEvaluation)DataContext).Score"></Binding>
+														<Binding Path="Score"></Binding>
+													</MultiBinding>
+												</CheckBox.IsChecked>
+											</CheckBox>
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal"></StackPanel>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
+					</DataTemplate>
+				</datatemplates:EvaluationTypeTemplateSelector>
+			</DataGrid.DataTemplates>
+
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="FirstName" Binding="{Binding Student.FirstName}"></DataGridTextColumn>
+				<DataGridTextColumn Header="LastName" Binding="{Binding Student.LastName}"></DataGridTextColumn>
+				<DataGridTemplateColumn Width="Auto">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ContentControl Content="{Binding}" ></ContentControl>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="Score" Binding="{Binding Score}"></DataGridTextColumn>
+				<DataGridTextColumn Header="Opmerkingen" Binding="{Binding Remarks}"></DataGridTextColumn>
+			</DataGrid.Columns>
+
+		</DataGrid>
+	</Grid>
+</UserControl>

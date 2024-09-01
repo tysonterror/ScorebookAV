@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:vm="using:ScorebookAV.ViewModels"
+			xmlns:models="using:ScorebookAV.Models"
+             x:Class="ScorebookAV.Views.ClassView"
+			 x:DataType="vm:ClassViewModel"
+			 >
+	<Panel>
+		
+		<TextBlock Text="Classes"></TextBlock>
+		<DataGrid  GridLinesVisibility="All" IsReadOnly="True" ItemsSource="{Binding Classes}">
+			<DataGrid.Resources>
+				<DataTemplate DataType="models:Class" x:Key="clsStudent">
+					<DataGrid ItemsSource="{Binding ClassStudents}" AutoGenerateColumns="False">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="FirstName" Binding="{Binding Student.FirstName}"></DataGridTextColumn>
+							<DataGridTextColumn Header="FirstName" Binding="{Binding Student.LastName}"></DataGridTextColumn>
+							<DataGridTextColumn Header="Geslacht" Binding="{Binding Student.Gender}"></DataGridTextColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+				</DataTemplate>
+			</DataGrid.Resources>
+
+			
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Id" Binding="{Binding ClassId}"></DataGridTextColumn>
+				<DataGridTextColumn Header="Description" Binding="{Binding Description}"></DataGridTextColumn>
+				<DataGridTextColumn Header="Year" Binding="{Binding Year}"></DataGridTextColumn>
+				<DataGridTemplateColumn  Header=""  CellTemplate="{StaticResource clsStudent}" CellEditingTemplate="">
+
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Panel>
+</UserControl>

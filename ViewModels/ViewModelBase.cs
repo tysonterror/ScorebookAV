@@ -2,7 +2,9 @@
 
 namespace ScorebookAV.ViewModels
 {
-    public class ViewModelBase : ObservableObject
+    public partial class ViewModelBase : ObservableObject
     {
+        [ObservableProperty]
+        private bool busyLoading;
     }
 }

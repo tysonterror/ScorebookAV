@@ -16,7 +16,7 @@ namespace ScorebookAV
         public static void AddCommonServices(this IServiceCollection collection)
         {
             collection.AddDbContext<ScorebookDbContext>(options =>
-            options.UseSqlite("Data Source=C:\\PersonalApps\\ScoreBookAV\\ScoreBookDb.db"));
+            options.UseSqlite("Data Source=C:\\RFT\\ScoreBookAV\\ScoreBookDb.db"));
             collection.AddTransient<MainViewModel>();
             collection.AddTransient<HomeViewModel>();
             collection.AddTransient<CurriculumViewModel>();

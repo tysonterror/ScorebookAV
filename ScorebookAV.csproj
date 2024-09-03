@@ -27,5 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Partials\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 </Project>

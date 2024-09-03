@@ -21,7 +21,6 @@ namespace ScorebookAV.ViewModels
         public HomeViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            //SetCurrentViewModel();
         }
         [CommunityToolkit.Mvvm.Input.RelayCommand]
         private async void SetCurriculumViewModel()

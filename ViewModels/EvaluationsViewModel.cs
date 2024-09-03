@@ -90,27 +90,37 @@ namespace ScorebookAV.ViewModels
         [RelayCommand]
         private void SetCheckmark(ClassStudentEvaluationAdjustScore classStudentEvaluationAdjustScore)
         {
-
-            var item = SelectedClassStudentEvaluations.FirstOrDefault(f => f.ClassStudentEvaluationId == classStudentEvaluationAdjustScore.ClassStudentEvaluation.ClassStudentEvaluationId);
-            if (item != null)
+            try
             {
-                using (var ctx = new ScorebookDbContext(_scorebookDbContextOptions))
+                BusyLoading = true;
+                var item = SelectedClassStudentEvaluations.FirstOrDefault(f => f.ClassStudentEvaluationId == classStudentEvaluationAdjustScore.ClassStudentEvaluation.ClassStudentEvaluationId);
+                if (item != null)
                 {
-                    var index = SelectedClassStudentEvaluations.IndexOf(item);
-                    var dbItem = ctx.ClassStudentEvaluations.Include(i => i.Student)
-                   .Include(i => i.ClassEvaluation).ThenInclude(i => i.EvaluationType).ThenInclude(i => i.PEvaluationTypeParams).FirstOrDefault(f => item.ClassStudentEvaluationId == f.ClassStudentEvaluationId);
-                    if (dbItem != null)
+                    using (var ctx = new ScorebookDbContext(_scorebookDbContextOptions))
                     {
-                        SelectedClassStudentEvaluations.RemoveAt(index);
-                        dbItem.Score = classStudentEvaluationAdjustScore.NewScore.Score;
-                        ctx.SaveChanges();
-                        SelectedClassStudentEvaluations.Insert(index, dbItem);
+                        var index = SelectedClassStudentEvaluations.IndexOf(item);
+                        var dbItem = ctx.ClassStudentEvaluations.Include(i => i.Student)
+                       .Include(i => i.ClassEvaluation).ThenInclude(i => i.EvaluationType)
+                       .ThenInclude(i => i.PEvaluationTypeParams).FirstOrDefault(f => item.ClassStudentEvaluationId == f.ClassStudentEvaluationId);
+                        if (dbItem != null)
+                        {
+                            SelectedClassStudentEvaluations.RemoveAt(index);
+                            dbItem.Score = classStudentEvaluationAdjustScore.NewScore.Score;
+                            ctx.SaveChanges();
+                            SelectedClassStudentEvaluations.Insert(index, dbItem);
+
+                        }
 
                     }
-
                 }
             }
-
+            catch (Exception ex)
+            {
+            }
+            finally
+            { 
+                BusyLoading = false;
+            }
         }
 
     }

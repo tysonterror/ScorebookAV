@@ -26,6 +26,7 @@
 			</DataGrid.Columns>
 
 		</DataGrid>
+		<ProgressBar  IsIndeterminate="True" Grid.Row="1" IsVisible="{Binding BusyLoading}"></ProgressBar>
 		<DataGrid IsReadOnly="True" Grid.Row="1" ItemsSource="{Binding SelectedClassStudentEvaluations}">
 			<DataGrid.DataTemplates>
 				<datatemplates:EvaluationTypeTemplateSelector>
@@ -78,5 +79,6 @@
 			</DataGrid.Columns>
 
 		</DataGrid>
+
 	</Grid>
 </UserControl>
